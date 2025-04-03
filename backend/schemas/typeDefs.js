@@ -13,9 +13,14 @@ const typeDefs = gql`
     first_name: String!
     last_name: String!
     email: String!
+    gender: String!
     designation: String!
     salary: Float!
     department: String!
+    date_of_joining: String!
+    employee_photo: String
+    created_at: String
+    updated_at: String
   }
 
   type AuthPayload {
