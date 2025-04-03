@@ -436,6 +436,18 @@ ngOnInit(): void {
       // Make sure date is in ISO format for the backend
       updatedEmployee.date_of_joining = this.f['date_of_joining'].value;
     }
+
+    if (updatedEmployee.date_of_joining) {
+      try {
+        // Convert to ISO string format
+        const date = new Date(updatedEmployee.date_of_joining);
+        if (!isNaN(date.getTime())) {
+          updatedEmployee.date_of_joining = date.toISOString();
+        }
+      } catch (error) {
+        console.error('Error formatting date:', error);
+      }
+    }
   
     this.employeeService.updateEmployee(this.employeeId, updatedEmployee)
       .subscribe({

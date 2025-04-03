@@ -339,6 +339,18 @@ export class AddEmployeeComponent {
     }
 
     const newEmployee: Employee = this.employeeForm.value;
+
+    if (newEmployee.date_of_joining) {
+      try {
+        // Convert to ISO string format
+        const date = new Date(newEmployee.date_of_joining);
+        if (!isNaN(date.getTime())) {
+          newEmployee.date_of_joining = date.toISOString();
+        }
+      } catch (error) {
+        console.error('Error formatting date:', error);
+      }
+    }
     
     this.loading = true;
     this.employeeService.addEmployee(newEmployee)

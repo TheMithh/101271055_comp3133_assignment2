@@ -241,35 +241,77 @@ export class EmployeeDetailComponent implements OnInit {
     private employeeService: EmployeeService
   ) {}
 
-  ngOnInit(): void {
-    this.loading = true;
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.employeeService.getEmployeeById(id)
-        .subscribe({
-          next: (data) => {
-            this.employee = data;
+// In employee-detail.component.ts - add some logging to see the raw date values
+ngOnInit(): void {
+  this.loading = true;
+  const id = this.route.snapshot.paramMap.get('id');
+  if (id) {
+    this.employeeService.getEmployeeById(id)
+      .subscribe({
+        next: (data) => {
+          if (!data || !data.id) {
+            this.error = 'Failed to load employee details: Invalid employee data returned';
             this.loading = false;
-          },
-          error: (error) => {
-            this.error = 'Failed to load employee details. ' + (error.message || '');
-            this.loading = false;
+            return;
           }
-        });
-    } else {
-      this.error = 'Employee ID is required';
-      this.loading = false;
-    }
+          
+          this.employee = data;
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error loading employee:', error);
+          this.error = 'Failed to load employee details. ' + 
+                      (error.message || error.graphQLErrors?.[0]?.message || 'Unknown error');
+          this.loading = false;
+        }
+      });
+  } else {
+    this.error = 'Employee ID is required';
+    this.loading = false;
   }
+}
 
   getInitials(firstName: string, lastName: string): string {
     return `${firstName.charAt(0)}${lastName.charAt(0)}`;
   }
 
-  formatDate(date: Date | string | undefined): string {
-    if (!date) return 'N/A';
-    return new Date(date).toLocaleDateString();
+ // In employee-detail.component.ts
+formatDate(date: Date | string | number | undefined): string {
+  if (!date) return 'N/A';
+  
+  try {
+    // Convert to Date object regardless of input type
+    let dateObj: Date;
+    
+    if (typeof date === 'number' || !isNaN(Number(date))) {
+      // If it's a timestamp (either number or numeric string)
+      dateObj = new Date(typeof date === 'string' ? Number(date) : date);
+    } else if (typeof date === 'string') {
+      // Regular date string
+      dateObj = new Date(date);
+    } else if (date instanceof Date) {
+      // Already a Date object
+      dateObj = date;
+    } else {
+      return String(date);
+    }
+    
+    // Check if date is valid before formatting
+    if (!isNaN(dateObj.getTime())) {
+      return dateObj.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    }
+    
+    // Return original value if conversion failed
+    return String(date);
+  } catch (error) {
+    console.error('Error formatting date:', error, 'Original value:', date);
+    return String(date);
   }
+}
 
   deleteEmployee(): void {
     if (!this.employee || !this.employee.id) return;

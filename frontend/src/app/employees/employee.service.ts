@@ -33,6 +33,8 @@ const GET_EMPLOYEE = gql`
       date_of_joining
       department
       employee_photo
+      created_at
+      updated_at
     }
   }
 `;
