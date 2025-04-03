@@ -1,3 +1,4 @@
+// update-employee.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -29,6 +30,105 @@ import { Employee } from '../../shared/models/employee.model';
         <form *ngIf="!loading && employee" [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
           <div class="form-row">
             <div class="form-group">
+              <label for="first_name">First Name</label>
+              <input 
+                type="text" 
+                id="first_name" 
+                formControlName="first_name" 
+                class="form-control" 
+                [ngClass]="{ 'is-invalid': submitted && f['first_name'].errors }"
+              >
+              <div *ngIf="submitted && f['first_name'].errors" class="invalid-feedback">
+                <div *ngIf="f['first_name'].errors['required']">First name is required</div>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="last_name">Last Name</label>
+              <input 
+                type="text" 
+                id="last_name" 
+                formControlName="last_name" 
+                class="form-control" 
+                [ngClass]="{ 'is-invalid': submitted && f['last_name'].errors }"
+              >
+              <div *ngIf="submitted && f['last_name'].errors" class="invalid-feedback">
+                <div *ngIf="f['last_name'].errors['required']">Last name is required</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input 
+              type="email" 
+              id="email" 
+              formControlName="email" 
+              class="form-control" 
+              [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
+            >
+            <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
+              <div *ngIf="f['email'].errors['required']">Email is required</div>
+              <div *ngIf="f['email'].errors['email']">Email must be a valid email address</div>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="gender">Gender</label>
+              <select 
+                id="gender" 
+                formControlName="gender" 
+                class="form-select" 
+                [ngClass]="{ 'is-invalid': submitted && f['gender'].errors }"
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+              <div *ngIf="submitted && f['gender'].errors" class="invalid-feedback">
+                <div *ngIf="f['gender'].errors['required']">Gender is required</div>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="date_of_joining">Date of Joining</label>
+              <input 
+                type="date" 
+                id="date_of_joining" 
+                formControlName="date_of_joining" 
+                class="form-control" 
+                [ngClass]="{ 'is-invalid': submitted && f['date_of_joining'].errors }"
+              >
+              <div *ngIf="submitted && f['date_of_joining'].errors" class="invalid-feedback">
+                <div *ngIf="f['date_of_joining'].errors['required']">Date of joining is required</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="department">Department</label>
+              <select 
+                id="department" 
+                formControlName="department" 
+                class="form-select" 
+                [ngClass]="{ 'is-invalid': submitted && f['department'].errors }"
+              >
+                <option value="">Select Department</option>
+                <option value="Engineering">Engineering</option>
+                <option value="HR">HR</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Finance">Finance</option>
+                <option value="Sales">Sales</option>
+              </select>
+              <div *ngIf="submitted && f['department'].errors" class="invalid-feedback">
+                <div *ngIf="f['department'].errors['required']">Department is required</div>
+              </div>
+            </div>
+            
+            <div class="form-group">
               <label for="designation">Designation</label>
               <input 
                 type="text" 
@@ -41,21 +141,31 @@ import { Employee } from '../../shared/models/employee.model';
                 <div *ngIf="f['designation'].errors['required']">Designation is required</div>
               </div>
             </div>
-            
-            <div class="form-group">
-              <label for="salary">Salary</label>
-              <input 
-                type="number" 
-                id="salary" 
-                formControlName="salary" 
-                class="form-control" 
-                [ngClass]="{ 'is-invalid': submitted && f['salary'].errors }"
-              >
-              <div *ngIf="submitted && f['salary'].errors" class="invalid-feedback">
-                <div *ngIf="f['salary'].errors['required']">Salary is required</div>
-                <div *ngIf="f['salary'].errors['min']">Salary must be at least 1000</div>
-              </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="salary">Salary</label>
+            <input 
+              type="number" 
+              id="salary" 
+              formControlName="salary" 
+              class="form-control" 
+              [ngClass]="{ 'is-invalid': submitted && f['salary'].errors }"
+            >
+            <div *ngIf="submitted && f['salary'].errors" class="invalid-feedback">
+              <div *ngIf="f['salary'].errors['required']">Salary is required</div>
+              <div *ngIf="f['salary'].errors['min']">Salary must be at least 1000</div>
             </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="employee_photo">Employee Photo URL (Optional)</label>
+            <input 
+              type="text" 
+              id="employee_photo" 
+              formControlName="employee_photo" 
+              class="form-control"
+            >
           </div>
           
           <div class="form-actions">
@@ -69,6 +179,7 @@ import { Employee } from '../../shared/models/employee.model';
       </div>
     </div>
   `,
+  // Keep the same styles
   styles: [`
     .update-employee-container {
       max-width: 800px;
@@ -126,14 +237,14 @@ import { Employee } from '../../shared/models/employee.model';
       margin-bottom: 0.5rem;
       font-weight: 500;
     }
-    .form-control {
+    .form-control, .form-select {
       width: 100%;
       padding: 0.75rem;
       border: 1px solid #ddd;
       border-radius: 4px;
       font-size: 1rem;
     }
-    .form-control:focus {
+    .form-control:focus, .form-select:focus {
       outline: none;
       border-color: #007bff;
       box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
@@ -233,62 +344,108 @@ export class UpdateEmployeeComponent implements OnInit {
     private employeeService: EmployeeService
   ) {
     this.employeeForm = this.formBuilder.group({
+      first_name: ['', Validators.required],
+      last_name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      gender: ['', Validators.required],
       designation: ['', Validators.required],
-      salary: ['', [Validators.required, Validators.min(1000)]]
+      salary: ['', [Validators.required, Validators.min(1000)]],
+      department: ['', Validators.required],
+      date_of_joining: ['', Validators.required],
+      employee_photo: ['']
     });
   }
 
-  ngOnInit(): void {
-    this.loading = true;
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.employeeId = id;
-      this.employeeService.getEmployeeById(id)
-        .subscribe({
-          next: (data) => {
-            this.employee = data;
-            this.employeeForm.patchValue({
-              designation: data.designation,
-              salary: data.salary
-            });
-            this.loading = false;
-          },
-          error: (error) => {
-            this.error = 'Failed to load employee data. ' + (error.message || '');
-            this.loading = false;
+// In update-employee.component.ts
+ngOnInit(): void {
+  this.loading = true;
+  const id = this.route.snapshot.paramMap.get('id');
+  if (id) {
+    this.employeeId = id;
+    this.employeeService.getEmployeeById(id)
+      .subscribe({
+        next: (data) => {
+          this.employee = data;
+          
+          // Fix the date formatting - this is where the error is occurring
+          let formattedDate = '';
+          if (data.date_of_joining) {
+            try {
+              // Handle different date formats that might come from the API
+              const date = new Date(data.date_of_joining);
+              if (!isNaN(date.getTime())) { // Check if date is valid
+                formattedDate = date.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+              }
+            } catch (e) {
+              console.error('Error formatting date:', e);
+            }
           }
-        });
-    } else {
-      this.error = 'Employee ID is required';
-      this.loading = false;
-    }
+          
+          this.employeeForm.patchValue({
+            first_name: data.first_name,
+            last_name: data.last_name,
+            email: data.email,
+            gender: data.gender,
+            designation: data.designation,
+            salary: data.salary,
+            department: data.department,
+            date_of_joining: formattedDate, // Use safely formatted date
+            employee_photo: data.employee_photo || ''
+          });
+          
+          this.loading = false;
+        },
+        error: (error) => {
+          this.error = 'Failed to load employee data. ' + (error.message || '');
+          this.loading = false;
+        }
+      });
+  } else {
+    this.error = 'Employee ID is required';
+    this.loading = false;
   }
+}
 
   // Convenience getter for easy access to form fields
   get f() { return this.employeeForm.controls; }
 
   onSubmit(): void {
     this.submitted = true;
-
+  
     // Stop if form is invalid
     if (this.employeeForm.invalid) {
       return;
     }
-
+  
     this.submitting = true;
-    this.employeeService.updateEmployee(
-      this.employeeId,
-      this.f['salary'].value,
-      this.f['designation'].value
-    )
-    .subscribe({
-      next: () => {
-        this.router.navigate(['/employees']);
-      },
-      error: error => {
-        this.error = error.message || 'Failed to update employee. Please try again.';
-        this.submitting = false;
-      }
-    });
+    
+    // Prepare data for submission with proper date handling
+    const updatedEmployee: Partial<Employee> = {
+      first_name: this.f['first_name'].value,
+      last_name: this.f['last_name'].value,
+      email: this.f['email'].value,
+      gender: this.f['gender'].value,
+      designation: this.f['designation'].value,
+      salary: this.f['salary'].value,
+      department: this.f['department'].value,
+      employee_photo: this.f['employee_photo'].value
+    };
+    
+    // Handle date formatting explicitly
+    if (this.f['date_of_joining'].value) {
+      // Make sure date is in ISO format for the backend
+      updatedEmployee.date_of_joining = this.f['date_of_joining'].value;
+    }
+  
+    this.employeeService.updateEmployee(this.employeeId, updatedEmployee)
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/employees']);
+        },
+        error: error => {
+          this.error = error.message || 'Failed to update employee. Please try again.';
+          this.submitting = false;
+        }
+      });
   }
 }

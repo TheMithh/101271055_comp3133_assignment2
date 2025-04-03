@@ -35,7 +35,7 @@ const typeDefs = gql`
     searchEmployeeByDeptOrDesg(department: String, designation: String): [Employee]
   }
 
-  type Mutation {
+ type Mutation {
     signup(username: String!, email: String!, password: String!): User
     addEmployee(
       first_name: String!,
@@ -48,7 +48,18 @@ const typeDefs = gql`
       gender: String!,
       employee_photo: String
     ): Employee
-    updateEmployee(id: ID!, salary: Float, designation: String): Employee
+    updateEmployee(
+      id: ID!, 
+      first_name: String, 
+      last_name: String, 
+      email: String, 
+      gender: String, 
+      designation: String, 
+      salary: Float, 
+      department: String, 
+      date_of_joining: String,
+      employee_photo: String
+    ): Employee
     deleteEmployee(id: ID!): String
   }
 `;

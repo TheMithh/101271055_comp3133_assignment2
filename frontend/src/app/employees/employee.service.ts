@@ -86,15 +86,40 @@ const ADD_EMPLOYEE = gql`
 `;
 
 const UPDATE_EMPLOYEE = gql`
-  mutation UpdateEmployee($id: ID!, $salary: Float, $designation: String) {
-    updateEmployee(id: $id, salary: $salary, designation: $designation) {
+  mutation UpdateEmployee(
+    $id: ID!, 
+    $first_name: String, 
+    $last_name: String, 
+    $email: String, 
+    $gender: String, 
+    $designation: String, 
+    $salary: Float, 
+    $department: String, 
+    $date_of_joining: String,
+    $employee_photo: String
+  ) {
+    updateEmployee(
+      id: $id,
+      first_name: $first_name,
+      last_name: $last_name,
+      email: $email,
+      gender: $gender,
+      designation: $designation,
+      salary: $salary,
+      department: $department,
+      date_of_joining: $date_of_joining,
+      employee_photo: $employee_photo
+    ) {
       id
       first_name
       last_name
       email
+      gender
       designation
       salary
       department
+      date_of_joining
+      employee_photo
     }
   }
 `;
@@ -162,10 +187,13 @@ export class EmployeeService {
     );
   }
 
-  updateEmployee(id: string, salary?: number, designation?: string): Observable<Employee> {
+  updateEmployee(id: string, employee: Partial<Employee>): Observable<Employee> {
     return this.apollo.mutate<any>({
       mutation: UPDATE_EMPLOYEE,
-      variables: { id, salary, designation },
+      variables: {
+        id,
+        ...employee
+      },
       refetchQueries: [
         { query: GET_EMPLOYEES }
       ]
@@ -175,7 +203,6 @@ export class EmployeeService {
       catchError(error => throwError(() => error))
     );
   }
-
   deleteEmployee(id: string): Observable<string> {
     return this.apollo.mutate<any>({
       mutation: DELETE_EMPLOYEE,
