@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://frontend-management-api.onrender.com/'
+    apiUrl: 'https://frontend-management-api.onrender.com/graphql'
   };
