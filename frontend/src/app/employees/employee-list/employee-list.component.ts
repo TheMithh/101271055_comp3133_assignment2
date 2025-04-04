@@ -32,14 +32,13 @@ import { EmployeeService } from '../employee.service';
           
           <div class="form-group">
             <label for="designation">Designation</label>
-            <select id="designation" formControlName="designation" class="form-select">
-              <option value="">All Designations</option>
-              <option value="Manager">Manager</option>
-              <option value="Developer">Developer</option>
-              <option value="Designer">Designer</option>
-              <option value="Analyst">Analyst</option>
-              <option value="HR Specialist">HR Specialist</option>
-            </select>
+            <input 
+              type="text" 
+              id="designation" 
+              formControlName="designation" 
+              class="form-control"
+              placeholder="Search for any designation..."
+            >
           </div>
           
           <button type="submit" class="btn btn-secondary">Search</button>
@@ -131,7 +130,7 @@ import { EmployeeService } from '../employee.service';
       margin-bottom: 0.5rem;
       font-weight: 500;
     }
-    .form-select {
+    .form-select, .form-control {
       width: 100%;
       padding: 0.75rem;
       border: 1px solid #ddd;
