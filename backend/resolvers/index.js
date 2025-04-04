@@ -69,14 +69,35 @@ getEmployeeByEid: async (_, { id }) => {
   },
   Mutation: {
     signup: async (_, { username, email, password }) => {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const user = new User({ username, email, password: hashedPassword });
-      await user.save();
-      return user;
+      try {
+        // Check if username already exists
+        const existingUsername = await User.findOne({ username });
+        if (existingUsername) {
+          throw new Error('Username already taken');
+        }
+        
+        // Check if email already exists
+        const existingEmail = await User.findOne({ email });
+        if (existingEmail) {
+          throw new Error('Email already in use');
+        }
+        
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = new User({ username, email, password: hashedPassword });
+        await user.save();
+        return user;
+      } catch (error) {
+        // Pass the error message up to be handled by GraphQL
+        throw new Error(error.message);
+      }
     },
     addEmployee: async (_, args) => {
       try {
         const employeeData = {...args};
+        const existingEmail = await Employee.findOne({ email: args.email });
+        if (existingEmail) {
+            throw new Error('An employee with this email already exists');
+        }
         
         // Parse date strings to Date objects
         if (employeeData.date_of_joining) {
@@ -92,11 +113,21 @@ getEmployeeByEid: async (_, { id }) => {
         return employee;
       } catch (error) {
         console.error(`Error adding employee: ${error.message}`);
-        throw new Error('Failed to add employee');
+        throw new Error(`Failed to add employee: ${error.message}`);
       }
     },
 updateEmployee: async (_, { id, ...updateFields }) => {
   try {
+    if (updateFields.email) {
+      const existingEmail = await Employee.findOne({ 
+        email: updateFields.email,
+        _id: { $ne: id } // Exclude the current employee
+      })}
+    if (existingEmail) {
+        throw new Error('This email is already associated with another employee');
+    }
+    
+    
     // Parse date_of_joining if provided
     if (updateFields.date_of_joining) {
       updateFields.date_of_joining = new Date(updateFields.date_of_joining);
@@ -122,7 +153,7 @@ updateEmployee: async (_, { id, ...updateFields }) => {
     return result;
   } catch (error) {
     console.error(`Error updating employee: ${error.message}`);
-    throw new Error('Failed to update employee');
+    throw new Error(`Failed to update employee: ${error.message}`);
   }
 },
     deleteEmployee: async (_, { id }) => {
