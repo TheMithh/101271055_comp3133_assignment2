@@ -1,10 +1,22 @@
 {
     "cleanUrls": true,
-    "rewrites": [
-      { "source": "/(.*)", "destination": "/index.html" }
+    "trailingSlash": false,
+    "headers": [
+      {
+        "source": "/(.*)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-store"
+          }
+        ]
+      }
     ],
-    "routes": [
-      { "handle": "filesystem" },
-      { "src": "/.*", "dest": "/index.html" }
+    "rewrites": [
+      {
+        "source": "/(.*)",
+        "destination": "/index.html"
+      }
     ]
   }
+  
