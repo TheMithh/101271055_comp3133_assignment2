@@ -57,10 +57,18 @@ getEmployeeByEid: async (_, { id }) => {
     throw new Error('Failed to fetch employee details');
   }
 },
+    // In resolvers/index.js - update the searchEmployeeByDeptOrDesg resolver
+
     searchEmployeeByDeptOrDesg: async (_, { department, designation }) => {
       const filter = {};
+      
       if (department) filter.department = department;
-      if (designation) filter.designation = designation;
+      
+      // Use regex for partial matching on designation
+      if (designation) {
+        filter.designation = { $regex: designation, $options: 'i' }; // 'i' makes it case-insensitive
+      }
+      
       return await Employee.find(filter);
     },
   },
