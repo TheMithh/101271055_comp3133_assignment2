@@ -117,7 +117,7 @@ export class AppComponent {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private apollo: Apollo // Add this to ensure Apollo is injected at the root
+    private apollo: Apollo 
   ) {
     this.updateLoginStatus();
   }

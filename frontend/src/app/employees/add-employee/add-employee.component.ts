@@ -333,7 +333,6 @@ export class AddEmployeeComponent {
   onSubmit(): void {
     this.submitted = true;
 
-    // Stop if form is invalid
     if (this.employeeForm.invalid) {
       return;
     }

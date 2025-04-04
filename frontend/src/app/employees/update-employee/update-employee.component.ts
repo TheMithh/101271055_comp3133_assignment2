@@ -1,4 +1,3 @@
-// update-employee.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -356,7 +355,6 @@ export class UpdateEmployeeComponent implements OnInit {
     });
   }
 
-// In update-employee.component.ts
 ngOnInit(): void {
   this.loading = true;
   const id = this.route.snapshot.paramMap.get('id');
@@ -367,7 +365,6 @@ ngOnInit(): void {
         next: (data) => {
           this.employee = data;
           
-          // Fix the date formatting - this is where the error is occurring
           let formattedDate = '';
           if (data.date_of_joining) {
             try {
@@ -389,7 +386,7 @@ ngOnInit(): void {
             designation: data.designation,
             salary: data.salary,
             department: data.department,
-            date_of_joining: formattedDate, // Use safely formatted date
+            date_of_joining: formattedDate, 
             employee_photo: data.employee_photo || ''
           });
           

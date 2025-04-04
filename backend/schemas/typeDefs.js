@@ -1,4 +1,3 @@
-// schemas/typeDefs.js
 const { gql } = require('apollo-server');
 
 const typeDefs = gql`

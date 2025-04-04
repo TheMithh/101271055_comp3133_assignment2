@@ -1,4 +1,3 @@
-// resolvers/index.js
 const User = require('../models/User');
 const Employee = require('../models/Employee');
 const bcrypt = require('bcrypt');
@@ -22,9 +21,6 @@ const resolvers = {
         return result;
       });
     },
-   // In resolvers/index.js
-// In resolvers/index.js
-// In resolvers/index.js
 getEmployeeByEid: async (_, { id }) => {
   try {
     const employee = await Employee.findById(id);
@@ -57,7 +53,6 @@ getEmployeeByEid: async (_, { id }) => {
     throw new Error('Failed to fetch employee details');
   }
 },
-    // In resolvers/index.js - update the searchEmployeeByDeptOrDesg resolver
 
     searchEmployeeByDeptOrDesg: async (_, { department, designation }) => {
       const filter = {};
@@ -100,7 +95,6 @@ getEmployeeByEid: async (_, { id }) => {
         throw new Error('Failed to add employee');
       }
     },
-    // In resolvers/index.js
 updateEmployee: async (_, { id, ...updateFields }) => {
   try {
     // Parse date_of_joining if provided

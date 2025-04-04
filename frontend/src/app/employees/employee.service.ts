@@ -5,7 +5,6 @@ import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Employee } from '../shared/models/employee.model';
 
-// GraphQL Queries and Mutations
 const GET_EMPLOYEES = gql`
   query GetAllEmployees {
     getAllEmployees {

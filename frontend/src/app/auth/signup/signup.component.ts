@@ -186,7 +186,6 @@ export class SignupComponent {
     private router: Router,
     private authService: AuthService
   ) {
-    // Redirect to home if already logged in
     if (this.authService.isAuthenticated()) {
       this.router.navigate(['/']);
     }

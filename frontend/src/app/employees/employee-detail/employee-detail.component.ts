@@ -241,7 +241,6 @@ export class EmployeeDetailComponent implements OnInit {
     private employeeService: EmployeeService
   ) {}
 
-// In employee-detail.component.ts - add some logging to see the raw date values
 ngOnInit(): void {
   this.loading = true;
   const id = this.route.snapshot.paramMap.get('id');
@@ -275,7 +274,6 @@ ngOnInit(): void {
     return `${firstName.charAt(0)}${lastName.charAt(0)}`;
   }
 
- // In employee-detail.component.ts
 formatDate(date: Date | string | number | undefined): string {
   if (!date) return 'N/A';
   

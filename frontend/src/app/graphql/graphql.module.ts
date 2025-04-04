@@ -15,7 +15,6 @@ import { environment } from '../../environments/environment';
     {
       provide: APOLLO_OPTIONS,
       useFactory: (httpLink: HttpLink) => {
-        // Create the http link
         const http = httpLink.create({
           uri: environment.apiUrl,
           withCredentials: true, // Important for CORS with credentials
