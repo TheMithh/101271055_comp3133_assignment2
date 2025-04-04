@@ -13,10 +13,8 @@ const server = new ApolloServer({
   resolvers,
   context: ({ req }) => ({ auth: req.headers.authorization }),
   cors: {
-    // Use environment variable for frontend URL in production
-    origin: process.env.FRONTEND_URL ? 
-      [process.env.FRONTEND_URL, 'http://localhost:4200'] : 
-      ['http://localhost:4200']
+    origin: ['https://101271055-comp3133-assignment2.vercel.app', 'http://localhost:4200'],
+    credentials: true
   }
 });
 
