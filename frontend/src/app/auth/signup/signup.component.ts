@@ -202,6 +202,8 @@ export class SignupComponent {
 
   onSubmit(): void {
     this.submitted = true;
+    this.error = ''; // Clear previous errors
+    this.success = false; // Reset success state
   
     // Stop if form is invalid
     if (this.signupForm.invalid) {
@@ -209,7 +211,6 @@ export class SignupComponent {
     }
   
     this.loading = true;
-    this.error = ''; // Clear any previous errors
     
     this.authService.signup(
       this.f['username'].value,
@@ -222,16 +223,21 @@ export class SignupComponent {
         this.loading = false;
       },
       error: error => {
-        // Handle GraphQL errors which come in a different structure than HTTP errors
+        // Extract the error message from the GraphQL error
         if (error.graphQLErrors && error.graphQLErrors.length > 0) {
           this.error = error.graphQLErrors[0].message;
-        } else if (error.networkError && error.networkError.error) {
-          this.error = error.networkError.error.message;
+        } else if (error.message && error.message.includes('Username already taken')) {
+          this.error = 'Username already taken';
+        } else if (error.message && error.message.includes('Email already in use')) {
+          this.error = 'Email already in use';
         } else {
-          this.error = error.message || 'Registration failed';
+          this.error = 'Registration failed: ' + (error.message || 'Unknown error');
         }
-        this.success = false; // Make sure success is false when there's an error
+        
+        this.success = false; // Ensure success is false
         this.loading = false;
+        
+        console.error('Signup error:', error);
       }
     });
   }

@@ -6,6 +6,7 @@ import { InMemoryCache } from '@apollo/client/core';
 import { onError } from '@apollo/client/link/error';
 import { environment } from '../../environments/environment';
 
+// In graphql.module.ts
 @NgModule({
   imports: [
     HttpClientModule
@@ -15,22 +16,18 @@ import { environment } from '../../environments/environment';
     {
       provide: APOLLO_OPTIONS,
       useFactory: (httpLink: HttpLink) => {
+        // Create the http link
         const http = httpLink.create({
           uri: environment.apiUrl,
-          withCredentials: true, // Important for CORS with credentials
         });
         
         // Error handling link
         const errorLink = onError(({ graphQLErrors, networkError }) => {
           if (graphQLErrors) {
-            graphQLErrors.forEach(({ message, locations, path }) => {
-              console.error(
-                `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-              );
-            });
+            console.log('GraphQL Errors:', graphQLErrors);
           }
           if (networkError) {
-            console.error(`[Network error]: ${networkError}`);
+            console.log('Network Error:', networkError);
           }
         });
         
@@ -39,11 +36,11 @@ import { environment } from '../../environments/environment';
           cache: new InMemoryCache(),
           defaultOptions: {
             watchQuery: {
-              fetchPolicy: 'network-only',
+              fetchPolicy: 'no-cache',
               errorPolicy: 'all'
             },
             query: {
-              fetchPolicy: 'network-only',
+              fetchPolicy: 'no-cache',
               errorPolicy: 'all'
             },
             mutate: {
