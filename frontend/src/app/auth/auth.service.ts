@@ -60,6 +60,8 @@ export class AuthService {
     );
   }
 
+// In auth.service.ts
+
   signup(username: string, email: string, password: string): Observable<User> {
     return this.apollo.mutate<any>({
       mutation: SIGNUP,
@@ -67,7 +69,11 @@ export class AuthService {
     })
     .pipe(
       map(result => result.data?.signup as User),
-      catchError(error => throwError(() => error))
+      catchError(error => {
+        // Log the error for debugging
+        console.error('Signup error:', error);
+        return throwError(() => error);
+      })
     );
   }
 

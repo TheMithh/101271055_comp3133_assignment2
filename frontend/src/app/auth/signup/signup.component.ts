@@ -202,13 +202,15 @@ export class SignupComponent {
 
   onSubmit(): void {
     this.submitted = true;
-
+  
     // Stop if form is invalid
     if (this.signupForm.invalid) {
       return;
     }
-
+  
     this.loading = true;
+    this.error = ''; // Clear any previous errors
+    
     this.authService.signup(
       this.f['username'].value,
       this.f['email'].value,
@@ -220,7 +222,15 @@ export class SignupComponent {
         this.loading = false;
       },
       error: error => {
-        this.error = error.message || 'Registration failed';
+        // Handle GraphQL errors which come in a different structure than HTTP errors
+        if (error.graphQLErrors && error.graphQLErrors.length > 0) {
+          this.error = error.graphQLErrors[0].message;
+        } else if (error.networkError && error.networkError.error) {
+          this.error = error.networkError.error.message;
+        } else {
+          this.error = error.message || 'Registration failed';
+        }
+        this.success = false; // Make sure success is false when there's an error
         this.loading = false;
       }
     });
