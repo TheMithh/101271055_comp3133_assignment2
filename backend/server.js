@@ -7,7 +7,6 @@ require('dotenv').config();
 
 connectDB();
 
-// In server.js or where your Apollo Server is configured
 const server = new ApolloServer({
   typeDefs,
   resolvers,
@@ -18,6 +17,12 @@ const server = new ApolloServer({
   }
 });
 
-server.listen({ port: process.env.PORT || 5000 }).then(({ url }) => {
+// Change this part to listen on the correct host and port
+const PORT = process.env.PORT || 5000;
+server.listen({ port: PORT, host: '0.0.0.0' }).then(({ url }) => {
   console.log(`🚀 Server ready at ${url}`);
+});
+
+server.get('/health', (req, res) => {
+  res.status(200).send('OK');
 });
