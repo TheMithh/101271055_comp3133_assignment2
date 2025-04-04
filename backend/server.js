@@ -22,7 +22,3 @@ const PORT = process.env.PORT || 5000;
 server.listen({ port: PORT, host: '0.0.0.0' }).then(({ url }) => {
   console.log(`🚀 Server ready at ${url}`);
 });
-
-server.get('/health', (req, res) => {
-  res.status(200).send('OK');
-});
