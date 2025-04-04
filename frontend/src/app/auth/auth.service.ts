@@ -62,20 +62,30 @@ export class AuthService {
 
 // In auth.service.ts
 
-  signup(username: string, email: string, password: string): Observable<User> {
-    return this.apollo.mutate<any>({
-      mutation: SIGNUP,
-      variables: { username, email, password }
+// In auth.service.ts - update your signup method
+
+signup(username: string, email: string, password: string): Observable<User> {
+  return this.apollo.mutate<any>({
+    mutation: SIGNUP,
+    variables: { username, email, password }
+  })
+  .pipe(
+    map(result => {
+      if (result && result.data && result.data.signup) {
+        return result.data.signup as User;
+      } else {
+        throw new Error('No data returned from server');
+      }
+    }),
+    catchError(err => {
+      // Make sure to log the complete error for debugging
+      console.error('GraphQL Error:', err);
+      
+      // Simply pass through the error to be handled by the component
+      return throwError(() => err);
     })
-    .pipe(
-      map(result => result.data?.signup as User),
-      catchError(error => {
-        // Log the error for debugging
-        console.error('Signup error:', error);
-        return throwError(() => error);
-      })
-    );
-  }
+  );
+}
 
   logout(): void {
     this.tokenService.clearStorage();

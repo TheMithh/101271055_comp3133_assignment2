@@ -200,17 +200,18 @@ export class SignupComponent {
   // Convenience getter for easy access to form fields
   get f() { return this.signupForm.controls; }
 
+  // In signup.component.ts
   onSubmit(): void {
     this.submitted = true;
-    this.error = ''; // Clear previous errors
-    this.success = false; // Reset success state
-  
+
     // Stop if form is invalid
     if (this.signupForm.invalid) {
       return;
     }
-  
+
     this.loading = true;
+    this.error = ''; // Clear any previous error
+    this.success = false; // Reset success flag
     
     this.authService.signup(
       this.f['username'].value,
@@ -218,26 +219,26 @@ export class SignupComponent {
       this.f['password'].value
     )
     .subscribe({
-      next: () => {
-        this.success = true;
+      next: (response) => {
+        // Only mark as successful if we get a valid response
+        if (response) {
+          this.success = true;
+          this.error = '';
+        }
         this.loading = false;
       },
-      error: error => {
-        // Extract the error message from the GraphQL error
-        if (error.graphQLErrors && error.graphQLErrors.length > 0) {
-          this.error = error.graphQLErrors[0].message;
-        } else if (error.message && error.message.includes('Username already taken')) {
-          this.error = 'Username already taken';
-        } else if (error.message && error.message.includes('Email already in use')) {
-          this.error = 'Email already in use';
+      error: (err) => {
+        this.loading = false;
+        this.success = false; // Make sure to set success to false
+        
+        // Extract the error message
+        if (err.graphQLErrors && err.graphQLErrors.length > 0) {
+          this.error = err.graphQLErrors[0].message;
         } else {
-          this.error = 'Registration failed: ' + (error.message || 'Unknown error');
+          this.error = 'Registration failed. Please try again.';
         }
         
-        this.success = false; // Ensure success is false
-        this.loading = false;
-        
-        console.error('Signup error:', error);
+        console.error('Signup error:', err);
       }
     });
   }
